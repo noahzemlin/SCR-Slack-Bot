@@ -1,9 +1,9 @@
 {
-    "name": "typescript-koa-api-boilerplate",
-    "version": "1.0.0",
-    "description": "A minimalist boilerplate for typescript, koa backend api.",
+    "name": "scr-slack-bot",
+    "version": "0.0.1",
+    "description": "In-house slack bot for SCR",
     "main": "main.ts",
-    "author": "Stephen Ashmore",
+    "author": "Noah Zemlin",
     "license": "MIT",
     "private": false,
     "scripts": {
