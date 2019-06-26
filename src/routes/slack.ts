@@ -19,8 +19,7 @@ class SlackRoute extends BaseRoute {
             return;
         });
         router.post('/praise', async (ctx, next) => {
-            console.log('Praise!');
-            console.log(ctx.request.body);
+            MasterController.PraiseController.parsePraise(ctx.request.body);
             ctx.status = 200;
             ctx.body = '';
             return;

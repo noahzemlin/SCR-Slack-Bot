@@ -1,14 +1,14 @@
-import ExampleController from './example';
+import PraiseController from './praise';
 
 class MasterController {
-    private exampleController: ExampleController;
+    private praiseController: PraiseController;
 
     constructor() {
-        this.exampleController = new ExampleController();
+        this.praiseController = new PraiseController();
     }
 
-    get ExampleController() {
-        return this.exampleController;
+    get PraiseController() {
+        return this.praiseController;
     }
 }
 
