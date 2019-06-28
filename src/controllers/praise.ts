@@ -2,25 +2,25 @@ import axios from 'axios';
 import config from '../config';
 
 export default class PraiseController {
-    public escapeRE: RegExp = /<(.*)\|(.*)>/g;
-    public messageRE: RegExp = /(?:<.*>) (.*)/g;
+    public escapeRE: RegExp = /<(@[^>]*)> /g;
 
     constructor() {
         // Connect to Redis
     }
 
     public parsePraise(body: any) {
+        let praisee = this.escapeRE.exec(body.text);
+        let praiseesStr = '';
+
+        while (praisee != null) {
+            praiseesStr += `<${praisee[1]}> `;
+            praisee = this.escapeRE.exec(body.text);
+        }
+
+        const message = body.text.replace(this.escapeRE, '');
+
         const data = {
-            text:
-                '<@' +
-                body.user_id +
-                '|' +
-                body.user_name +
-                '> has praised ' +
-                this.escapeRE.exec(body.text)[0] +
-                ' for `' +
-                this.messageRE.exec(body.text)[1] +
-                '`',
+            text: `<@${body.user_id}> has praised ${praiseesStr} for \`${message}\`!`,
         };
 
         const cfg = {
