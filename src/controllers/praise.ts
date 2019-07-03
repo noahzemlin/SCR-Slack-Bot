@@ -1,5 +1,8 @@
 import axios from 'axios';
+import * as moment from 'moment';
+import * as mongoose from 'mongoose';
 import config from '../config';
+import Repo from '../repo/repo';
 
 export default class PraiseController {
     public escapeRE: RegExp = /<(@[^>]*)> /g;
@@ -30,5 +33,18 @@ export default class PraiseController {
         };
 
         axios.post(config.slackwebhook, data, cfg);
+        const newid: string = new mongoose.mongo.ObjectID().toHexString();
+        Repo.database()
+            .mongo()
+            .findOneAndUpdate(
+                { _id: newid },
+                {
+                    praiser: body.user_id,
+                    praisee: praiseesStr,
+                    reason: message,
+                    date: moment(),
+                },
+                { new: true, upsert: true }
+            );
     }
 }
