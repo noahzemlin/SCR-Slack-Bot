@@ -8,11 +8,11 @@ mongoose.set('useCreateIndex', true);
 mongoose.set('useFindAndModify', false);
 
 export default class Repo {
-    private static globalRepo: Repo;
+    private static globalRepo: Repo = new Repo();
     private connection: mongoose.Connection = null;
     private model: mongoose.Model<mongoose.Document> = null;
 
-    public connect() {
+    public async connect() {
         if (this.connection == null) {
             const schema = new Schema({
                 praiser: SchemaTypes.String,
@@ -23,10 +23,18 @@ export default class Repo {
 
             schema.index({ praisee: 1 }, { unique: false });
 
-            this.connection = mongoose.createConnection('mongodb://mongodb:27017/scrbot', {
+            this.connection = mongoose.createConnection('mongodb://localhost:27017/scrbot', {
                 useNewUrlParser: true,
             });
             this.model = this.connection.model('SCRBotStore', schema, 'praises');
+            this.model.on('index', (err: any) => {
+                if (err) {
+                    console.log(
+                        `WARNING: MONGO INDEX FAILED! A MIGRATION IS NEEDED. ERROR: ${err}`
+                    );
+                }
+            });
+
         }
     }
 

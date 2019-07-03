@@ -33,18 +33,13 @@ export default class PraiseController {
         };
 
         axios.post(config.slackwebhook, data, cfg);
-        const newid: string = new mongoose.mongo.ObjectID().toHexString();
         Repo.database()
             .mongo()
-            .findOneAndUpdate(
-                { _id: newid },
-                {
-                    praiser: body.user_id,
-                    praisee: praiseesStr,
-                    reason: message,
-                    date: moment(),
-                },
-                { new: true, upsert: true }
-            );
+            .create({
+                praiser: body.user_id,
+                praisee: praiseesStr,
+                reason: message,
+                date: moment().toDate(),
+            });
     }
 }
